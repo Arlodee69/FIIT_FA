@@ -4,8 +4,8 @@ using TreeDataStructures.Interfaces;
 
 namespace TreeDataStructures.Core;
 
-public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>? comparer = null) 
-    : ITree<TKey, TValue>
+public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>? comparer = null)
+    : ITree<TKey, TValue> 
     where TNode : Node<TKey, TValue, TNode>
 {
     protected TNode? Root;
@@ -21,8 +21,53 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
     
     public virtual void Add(TKey key, TValue value)
     {
-        throw new NotImplementedException(
-            "Implement standard BST add logic using <CreateNode(key, value)> and OnNodeAdded(newNode)");
+        if (Root == null)
+        {
+            Root = CreateNode(key, value);
+            Root.Parent = null;
+            Count = 1;
+            OnNodeAdded(Root);
+            return;
+        }
+
+        TNode current = Root;
+        TNode? parent = null;
+        int cmp = 0;
+
+        while(current != null)
+        {
+            parent = current;
+            cmp = Comparer.Compare(key, current.Key);
+
+            if(cmp == 0)
+            {
+                current.Value = value;
+                return;
+            }
+
+            else if(cmp < 0)
+            {
+                current = current.Left!;
+            }
+            else
+            {
+                current = current.Right!;
+            }
+        }
+
+        TNode newNode = CreateNode(key, value);
+        newNode.Parent = parent;
+
+        if (cmp < 0)
+        {
+            parent!.Left = newNode;
+        }
+        else
+        {
+            parent!.Right = newNode;
+        }
+        Count++;
+        OnNodeAdded(newNode);
     }
 
     
@@ -39,8 +84,49 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
     
     protected virtual void RemoveNode(TNode node)
     {
-        throw new NotImplementedException("Implement standard BST delete logic using Transplant helper");
-    }
+        if (node.Left == null && node.Right == null)
+        {
+            Transplant(node, null);
+            OnNodeRemoved(node.Parent, node.Right);
+            return;
+
+        }
+        else if (node.Left == null)
+        {
+            Transplant(node, node.Right);
+            OnNodeRemoved(node.Parent, node.Right);
+            return;
+        }
+
+        else if (node.Right == null)
+        {
+            Transplant(node, node.Left);
+            OnNodeRemoved(node.Parent, node.Left);
+            return;
+        }
+
+        else
+        {
+            TNode successor;
+            node = node.Right;
+            while(node.Left != null)
+            {
+                node = node.Left;
+            }
+            successor = node;
+            if (successor.Parent != node)
+            {
+                Transplant(successor, successor.Right);
+                successor.Right = node.Right;
+                successor.Right.Parent = successor;
+            }
+            Transplant(node, successor);
+            successor.Left = node.Left;
+            successor.Left.Parent = successor;
+        
+            OnNodeRemoved(successor.Parent, successor);
+            }
+        }
 
     public virtual bool ContainsKey(TKey key) => FindNode(key) != null;
     
