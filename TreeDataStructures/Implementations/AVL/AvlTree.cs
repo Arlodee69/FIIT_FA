@@ -46,7 +46,13 @@ public class AvlTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, AvlNode<
             // левый ребенок перевешивает вправо
             if (GetBalance(node.Left) < 0)
             {
-                RotateBigLeft(node);
+                RotateBigRight(node);
+                UpdateHeight(node);
+            }
+            else
+            {
+                RotateRight(node);
+                UpdateHeight(node);
             }
         }
 
@@ -55,7 +61,13 @@ public class AvlTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, AvlNode<
             // правый ребенок перевешивает влево
             if (GetBalance(node.Right) > 0)
             {
-                RotateBigRight(node.Right!);
+                RotateBigLeft(node);
+                UpdateHeight(node);
+            }
+            else
+            {
+                RotateLeft(node);
+                UpdateHeight(node);
             }
         }      
     }
