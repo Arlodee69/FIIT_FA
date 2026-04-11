@@ -19,37 +19,37 @@ public class Treap<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, TreapNode<
 
         if (cmp <= 0)
         {
-            var splitResult = Split(root.Right, key);
-            root.Right = splitResult.Left;
+            var (Left, Right) = Split(root.Right, key);
+            root.Right = Left;
 
             if (root.Right != null)
             {
                 root.Right.Parent = root;
             }
 
-            if (splitResult.Right != null) 
+            if (Right != null) 
             {
-                splitResult.Right.Parent = null;
+                Right.Parent = null;
             }
 
-            return (root, splitResult.Right);
+            return (root, Right);
         }
         else
         {
-            var splitResult = Split(root.Left, key);
-            root.Left = splitResult.Right;
+            var (Left, Right) = Split(root.Left, key);
+            root.Left = Right;
 
             if (root.Left != null)
             {
                 root.Left.Parent = root; 
             }
 
-            if (splitResult.Left != null)
+            if (Left != null)
             {
-                splitResult.Left.Parent = null;
+                Left.Parent = null;
             }
 
-            return (splitResult.Left, root); 
+            return (Left, root); 
         }
     }
 
@@ -117,7 +117,7 @@ public class Treap<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, TreapNode<
     public override bool Remove(TKey key)
     {
         if (key == null) throw new Exception("null");
-
+ 
         var node = FindNode(key);
         if (node == null) return false;
 
