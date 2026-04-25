@@ -151,17 +151,15 @@ public class RedBlackTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, RbN
 
             if (x == x_parent.Left)
             {
-                var brother = x_parent.Right;
+                var brother = x_parent.Right;            
 
                 if (IsRed(brother))
                 {
                     brother.Color = RbColor.Black;
                     x_parent.Color = RbColor.Red;
                     RotateLeft(x_parent);
-                    brother = x_parent.Right;
+                    brother = x_parent.Right;           //брата не может не быть
                 }
-
-                if (brother == null) break;
 
                 if (!IsRed(brother.Left) && !IsRed(brother.Right))
                 {
@@ -175,7 +173,9 @@ public class RedBlackTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, RbN
                     {
                         if (brother.Left != null) brother.Left.Color = RbColor.Black;
                         brother.Color = RbColor.Red;
-                        RotateRight(brother);
+                        if (brother != null){
+                            RotateRight(brother);
+                        }
                         brother = x_parent.Right;
                     }
 
@@ -201,8 +201,6 @@ public class RedBlackTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, RbN
                     brother = x_parent.Left;
                 }
 
-                if (brother == null) break;
-
                 if (!IsRed(brother.Right) && !IsRed(brother.Left))
                 {
                     brother.Color = RbColor.Red;
@@ -215,7 +213,9 @@ public class RedBlackTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, RbN
                     {
                         if (brother.Right != null) brother.Right.Color = RbColor.Black;
                         brother.Color = RbColor.Red;
-                        RotateLeft(brother);
+                        if (brother != null){
+                            RotateLeft(brother);
+                        }
                         brother = x_parent.Left;
                     }
 
