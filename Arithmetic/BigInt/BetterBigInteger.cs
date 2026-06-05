@@ -433,6 +433,7 @@ public sealed class BetterBigInteger : IBigInteger
 
         return new BetterBigInteger(result, a.IsNegative);        
     }
+    
     public static BetterBigInteger operator >> (BetterBigInteger a, int shift)
     {
         ArgumentNullException.ThrowIfNull(a);

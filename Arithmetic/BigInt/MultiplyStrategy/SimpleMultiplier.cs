@@ -6,8 +6,8 @@ internal class SimpleMultiplier : IMultiplier
 {
     public BetterBigInteger Multiply(BetterBigInteger a, BetterBigInteger b) 
     {
-        var da = a.GetDigits();
-        var db = b.GetDigits();
+        ReadOnlySpan<uint> da = a.GetDigits();
+        ReadOnlySpan<uint> db = b.GetDigits();
 
         if (da.Length == 1 && da[0] == 0) return new BetterBigInteger(new uint[] { 0 });
         if (db.Length == 1 && db[0] == 0) return new BetterBigInteger(new uint[] { 0 });
@@ -33,8 +33,7 @@ internal class SimpleMultiplier : IMultiplier
                 uint p2 = aH * bL;
                 uint p3 = aH * bH;
 
-                // Достаем то, что уже накопилось в массиве, и текущий перенос
-                uint resL = res[i + j] & 0xFFFF;
+                uint resL = res[i + j] & 0xFFFF; // текущий результат
                 uint resH = res[i + j] >> 16;
                 uint carryL = carry & 0xFFFF;
                 uint carryH = carry >> 16;

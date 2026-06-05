@@ -142,8 +142,8 @@ public class RedBlackTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, RbN
 
     protected override void OnNodeRemoved(RbNode<TKey, TValue>? parent, RbNode<TKey, TValue>? child)
     {
-        var x = child;
-        var x_parent = parent;
+        RbNode<TKey, TValue>? x = child;
+        RbNode<TKey, TValue>? x_parent = parent;
 
         while (x != Root && !IsRed(x))
         {
@@ -151,7 +151,7 @@ public class RedBlackTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, RbN
 
             if (x == x_parent.Left)
             {
-                var brother = x_parent.Right;            
+                RbNode<TKey, TValue>? brother = x_parent.Right;            
 
                 if (IsRed(brother))
                 {
@@ -191,7 +191,7 @@ public class RedBlackTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, RbN
             }
             else
             {
-                var brother = x_parent.Left;
+                RbNode<TKey, TValue>? brother = x_parent.Left;
 
                 if (IsRed(brother))
                 {
